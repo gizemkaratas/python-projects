@@ -1,0 +1,19 @@
+def toplama(a,b):
+    return a+b 
+def çıkarma(a,b):
+     return a-b 
+def bölme(a,b):
+     return a/b 
+def çarpma(a,b):
+     return a*b
+a=int(input("birinci sayıyı gir"))
+b=int(input("ikinci sayıyı gir"))
+c=input("işlemin nedir +,-,*,/")
+if c== "+":
+     print(toplama(a, b))
+if c== "-":
+    print(çıkarma(a,b))
+if c== "/":
+   print(bölme(a,b))
+if c== "*":
+   print(çarpma(a,b))

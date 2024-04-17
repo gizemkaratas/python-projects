@@ -1,0 +1,15 @@
+""" piyango için rakamları bilmeye çalışacak """
+#amorti kazanılacak, piyango 7 rakamlı,
+#uzunluk = len(str(sayi)) print("Sayının uzunluğu:", uzunluk)
+import random as r
+RandomSayi= r.randint(1000000,9999999)
+a=int(input("bilet numaran ne"))
+print("Piyongo Sonucu:",RandomSayi)
+if not len(str(a))==7:
+    print("girdiğiniz sayı 7 basamaklı olmalıdır")
+elif a==RandomSayi:
+    print("tebrikleeeerr büyük ikramiyenin sahibisiniz")
+elif RandomSayi%10 ==a%10:
+    print("amorti kazandınız")
+else:
+    print("kazanamadınız")

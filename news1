@@ -1,0 +1,12 @@
+x= float(input("vize notun:")) #%25 etki
+y= float(input("final notun:"))#%50 etki
+z= float(input("1. quiz notun:"))#%7.5 etki
+q= float(input("2. quiz notun:"))#%7.5 etki
+t= float(input("ödev notun:"))#%10 etki
+a= (x*(25/100)+
+(y*(50/100))+(z*(75/1000))+(q*(75/1000))+(t*(10/100)))
+if a>=50:
+    print("tebriklerrrrrr geçtin")
+elif a<50:
+       print("yine dene yine yenil")
+       

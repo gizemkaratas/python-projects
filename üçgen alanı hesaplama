@@ -1,0 +1,13 @@
+import math
+
+def alan(a,b,c):
+    return (math.sqrt(s*(s-a)*(s-b)*(s-c)))
+     
+a=int(input("1. kenarın ölçüsü:"))
+b=int(input("2. kenarın ölçüsü:"))
+c=int(input("3. kenarın ölçüsü:"))
+s=(a+b+c)/2
+
+result = alan(a,b,c)
+
+print(result)

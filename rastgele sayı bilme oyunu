@@ -1,0 +1,8 @@
+import random as r
+RandomSayi= r.randint(1,100)
+a=int(input("bir sayı ver allan aşkınaa"))
+print(RandomSayi)
+if a==RandomSayi:
+    print("tebrikleeeerr")
+if not a==RandomSayi:
+    print("bilemedi ki bilemedi kii")

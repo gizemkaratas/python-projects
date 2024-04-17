@@ -1,0 +1,28 @@
+def toplama(a,b):
+    return a+b 
+def çıkarma(a,b):
+     return a-b 
+def bölme(a,b):
+     return a/b 
+def çarpma(a,b):
+     return a*b
+result = 0
+while 1:
+    g=input("ne işlem yapılacak,G    ,H")
+    if g =="G":
+        a=int(input("birinci sayıyı gir"))
+        b=int(input("ikinci sayıyı gir"))
+        c=input("işlemin nedir +,-,*,/")
+        if c== "+":
+             result = toplama(a, b)
+        if c== "-":
+            result = çıkarma(a,b)
+        if c== "/":
+           result = bölme(a,b)
+        if c== "*":
+           result = çarpma(a,b)
+    elif g == "H":
+        print(result)
+    else:
+        print(a)
+        

@@ -1,0 +1,17 @@
+i=0
+numbers=[0]
+mi=0
+ma=0
+
+for i in range(10):
+
+    numbers[i] = int(input("sayı giriniz:"))
+    numbers.append(i)
+i=0
+for i in numbers:
+    if numbers[i] < numbers[mi]:
+       mi=i
+    if numbers[i] > numbers[ma]:
+       ma=i
+       
+print(mi,ma)

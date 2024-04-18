@@ -1,0 +1,14 @@
+i=0
+list1=[]
+list2=[]
+x=0
+while i<10:
+    a=int(input("sayı giriniz"))
+    
+    i=i+1
+    if not i%2==0:
+        list1.append(i)
+    else :
+        list2.append(i)
+   print(list1+list1.append(0)+list2)     
+print(list1+list2)

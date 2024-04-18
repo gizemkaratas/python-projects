@@ -1,0 +1,11 @@
+def gizbil():
+  i=0
+  result=0
+  
+  while i<3:
+      number=int(input("sayı girin"))
+      if number<0:
+           i=i+1
+      else :
+          result= result+number
+  print(result)

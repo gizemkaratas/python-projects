@@ -1,0 +1,166 @@
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import LocalOutlierFactor
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+df = pd.read_csv("SampleSales.csv")
+print(df.dropna())
+def veri_inceleme(df):
+    print("\nDataframe'in ilk 5 tanesi")
+    print(df.head())
+    print("\n\nDataframe'in columnları")
+    print(df.columns)
+    print("\n\nDataframe hakkında istatistiksel bilgi")
+    print(df.describe())
+    print("/Column Sayısı:")
+    print(df.shape)
+    print("\n\nDataframe hakkındaki bilgileri verir")
+    print(df.info())
+    print("\n\nDataframe'deki boş girilen hücreleri gösterir")
+    print(df.isnull().sum())
+veri_inceleme(df)
+df=df[['ItemID',"year","WeekIdentifier","NewBasePrice","TotalInventory","SalesQuantity","ProjectedInventory"]]
+def bak_korelasyon(df):
+    # Korelasyon matrisini hesaplama
+    correlation_matrix = df.corr()
+    highest_correlations = correlation_matrix.unstack().sort_values(ascending=False)
+    highest_correlations = highest_correlations[(highest_correlations > 0) & (highest_correlations < 1)]
+    print("En Yüksek Korelasyonlar:")
+    print(highest_correlations)
+
+    # Korelasyon matrisini görüntüleme
+    print("\nKorelasyon Matrisi:")
+    print(correlation_matrix, "\n\n")
+    correlation_matrix['TotalInventory'].sort_values(ascending=False)
+bak_korelasyon(df)
+print(df)
+def bak_outlier(df):
+    # Local Outlier Factor (LOF) modelini oluşturma
+    lof_model = LocalOutlierFactor(n_neighbors=20, contamination=0.1)  # Parametreler isteğe göre ayarlanabilir
+
+    # LOF modelini veri setine uygulama
+    outlier_scores = lof_model.fit_predict(df)
+
+    # Aykırı değerlerin indekslerini alma
+    outliers_index = df.index[outlier_scores == -1]
+
+    # Aykırı değerleri ortalama değer ile değiştirme
+    df_corrected = df.copy()
+    for column in df.columns:
+        mean_value = df[column].median()
+        df_corrected.loc[outliers_index, column] = mean_value
+
+    # Aykırı değerleri düzeltilmiş veriyi görüntüleme
+    print("Aykırı Değerleri Düzeltildi:")
+    print(df_corrected.loc[outliers_index])
+    return df_corrected
+bak_outlier(df)
+def yap_scaler(df):
+    # Standartlaştırma işlemi için StandardScaler kullanma
+    scaler = StandardScaler()
+
+    num_columns = ["NewBasePrice", "MonthlyCharges", "TotalCharges"]
+    scaled_features = scaler.fit_transform(df[num_columns])
+
+    # Standartlaştırılmış veriyi DataFrame'e dönüştürme
+    df_scaled = pd.DataFrame(scaled_features, columns=['tenure_1_scaled', 'MonthlyCharges_scaled', 'TotalCharges_scaled'])
+
+    # Standartlaştırılmış veriyi görüntüleme
+    print("Standartlaştırılmış Veri:")
+    print(df_scaled.head())
+    df = pd.concat([df, df_scaled], axis=1)
+    df = df.drop(num_columns, axis=1)
+    return df
+def logisticRegression(df):
+    X = df.drop("Churn", axis=1)
+    y = df["Churn"]
+    model = LogisticRegression()
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    prediction = model.predict(X_test)
+    train_accuracy = model.score(X_train, y_train)
+    test_accuracy = model.score(X_test, y_test)
+
+    print("\nEğitim seti doğruluk skoru:", train_accuracy)
+    print("Test seti doğruluk skoru:", test_accuracy)
+
+    # Modelin tahminlerini yap
+    y_pred_train = model.predict(X_train)
+    y_pred_test = model.predict(X_test)
+
+    # Modelin performansını ölç
+    train_mse = mean_squared_error(y_train, y_pred_train)
+    test_mse = mean_squared_error(y_test, y_pred_test)
+
+    train_mae = mean_absolute_error(y_train, y_pred_train)
+    test_mae = mean_absolute_error(y_test, y_pred_test)
+# Lineer regresyon modeli oluşturma ve eğitme
+from sklearn.linear_model import LinearRegression
+
+
+def linearRegression(df):
+    X = df.drop(columns=['ProjectedInventory'])
+    y = df["ProjectedInventory"]
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+
+    # Modelin doğruluk oranlarını yazdırma
+    train_accuracy = model.score(X_train, y_train)
+    test_accuracy = model.score(X_test, y_test)
+
+    print("\nEğitim seti doğruluk skoru:", train_accuracy)
+    print("Test seti doğruluk skoru:", test_accuracy)
+linearRegression(df)
+def SVC(df):
+
+    X = df.drop("Churn", axis=1)
+    y = df["Churn"]
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+    # SVM modeli oluşturma ve eğitme
+    model = SVC(kernel='linear')
+    model.fit(X_train, y_train)
+
+    # Modelin doğruluk, hassasiyet ve duyarlılık skorlarını yazdırma
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+
+    print("Doğruluk skoru:", accuracy)
+    print("Hassasiyet skoru:", precision)
+    print("Duyarlılık skoru:", recall)
+# Tarih sütunlarını datetime tipine dönüştür
+from statsmodels.tsa.arima.model import ARIMA
+import matplotlib.pyplot as plt
+df['Date'] = pd.to_datetime(df['year'].astype(str) + '-W' + df['WeekIdentifier'].astype(str) + '-1', format='%G-W%V-%u')
+# Tarih sütununu index olarak ayarla
+df.set_index('Date', inplace=True)
+
+# Veri setini görselleştir
+plt.figure(figsize=(10, 6))
+plt.plot(df['SalesQuantity'], label='Sales Quantity')
+plt.title('Sales Quantity Over Time')
+plt.xlabel('Date')
+plt.ylabel('Sales Quantity')
+plt.legend()
+plt.show()
+
+# ARIMA modeli oluştur
+model = ARIMA(df['SalesQuantity'], order=(1, 1, 1))  # Örnek bir ARIMA modeli, parametreler ayarlanabilir
+model_fit = model.fit()
+
+# Tahmin yap
+forecast = model_fit.forecast(steps=10)  # 10 adet gelecek değer tahmini yap
+print("Forecasted Sales Quantity:")
+print(forecast)
+
+mae = mean_absolute_error(df['SalesQuantity'], forecast)
+print("Mean Absolute Error (MAE):", mae)
